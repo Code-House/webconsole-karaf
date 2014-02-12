@@ -34,9 +34,16 @@
 
     <packaging>pom</packaging>
 
+    <properties>
+        <scala.version>2.10.3</scala.version>
+        <karaf.version>2.3.3</karaf.version>
+        <guava.version>15.0</guava.version>
+    </properties>
+
     <modules>
         <module>branding</module>
         <module>platform</module>
+        <module>features</module>
     </modules>
 
     <dependencyManagement>
@@ -55,6 +62,47 @@
                 <groupId>org.webconsole</groupId>
                 <artifactId>app</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <!-- provided modules -->
+            <dependency>
+                <groupId>org.webconsole.karaf.features</groupId>
+                <artifactId>dto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webconsole.karaf.features</groupId>
+                <artifactId>jmx</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webconsole.karaf.features</groupId>
+                <artifactId>jolokia</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webconsole.karaf.features</groupId>
+                <artifactId>ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- other dependencies -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.karaf.features</groupId>
+                <artifactId>org.apache.karaf.features.management</artifactId>
+                <version>${karaf.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
