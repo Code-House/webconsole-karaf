@@ -1,19 +1,22 @@
 package org.webconsole.karaf.features.jmx;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import org.apache.karaf.features.management.FeaturesServiceMBean;
-import org.webconsole.karaf.features.dto.FeaturesServiceAdapter;
-import org.webconsole.karaf.features.dto.Feature;
-import org.webconsole.karaf.features.dto.Repository;
+import java.util.Collections;
+import java.util.List;
 
 import javax.management.openmbean.CompositeData;
-import javax.management.openmbean.TabularData;
-import java.util.List;
+
+import org.apache.karaf.features.management.FeaturesServiceMBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.webconsole.karaf.features.dto.FeatureTO;
+import org.webconsole.karaf.features.dto.FeaturesServiceAdapter;
+import org.webconsole.karaf.features.dto.RepositoryTO;
+import org.webconsole.karaf.features.jmx.ts.TabularFunction;
+import org.webconsole.karaf.features.jmx.ts.TabularStructures;
 
 public class JmxFeaturesService implements FeaturesServiceAdapter {
 
+    private final Logger logger = LoggerFactory.getLogger(JmxFeaturesService.class);
     private final FeaturesServiceMBean featuresService;
 
     public JmxFeaturesService(FeaturesServiceMBean featuresService) {
@@ -21,52 +24,62 @@ public class JmxFeaturesService implements FeaturesServiceAdapter {
     }
 
     @Override
-    public List<Feature> getFeatures() {
+    public List<FeatureTO> getFeatures() {
         try {
-            TabularData features = featuresService.getFeatures();
-            CompositeData compositeData = features.get(new Object[]{FeaturesServiceMBean.FEATURE});
-            return Lists.newArrayList(Collections2.transform(compositeData.values(), new Function<Object, Feature>() {
+            return TabularStructures.apply(featuresService.getFeatures(), new TabularFunction<String, FeatureTO>() {
                 @Override
-                public Feature apply(Object input) {
-                    Object[] feature = (Object[]) input;
-                    return new Feature((String) feature[0], (String) feature[1], false);
+                public FeatureTO apply(List<String> key, CompositeData value) {
+                    String name = (String) value.get(FeaturesServiceMBean.FEATURE_NAME);
+                    String version = (String) value.get(FeaturesServiceMBean.FEATURE_VERSION);
+                    Boolean installed = (Boolean) value.get(FeaturesServiceMBean.FEATURE_INSTALLED);
+                    return new FeatureTO(name, version, installed);
                 }
-            }));
+            });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unable to fetch features", e);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
-    public List<Repository> getRepositories() {
-        return null;
+    public List<RepositoryTO> getRepositories() {
+        try {
+           return TabularStructures.apply(featuresService.getRepositories(), new TabularFunction<String, RepositoryTO>() {
+                @Override
+                public RepositoryTO apply(List<String> key, CompositeData value) {
+                    return new RepositoryTO((String) value.get(FeaturesServiceMBean.REPOSITORY_NAME), (String) key.get(0));
+                }
+            });
+        } catch (Exception e) {
+            logger.error("Unable to fetch repositories", e);
+        }
+        return Collections.emptyList();
     }
 
     @Override
-    public void removeRepository(Repository repository) {
+    public void removeRepository(RepositoryTO repository) {
         try {
             featuresService.removeRepository(repository.getUri());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unable to remove repository {}", repository.getUri(), e);
         }
     }
 
     @Override
-    public void installFeature(Feature feature) {
+    public void installFeature(FeatureTO feature) {
         try {
             featuresService.installFeature(feature.getName(), feature.getVersion());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to install feature {}", feature.getName(), e);
         }
     }
 
     @Override
-    public void uninstallFeature(Feature feature) {
+    public void uninstallFeature(FeatureTO feature) {
         try {
             featuresService.uninstallFeature(feature.getName(), feature.getVersion());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to uninstall feature {}", feature.getName(), e);
         }
     }
 }

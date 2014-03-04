@@ -13,37 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.webconsole.karaf.features.jmx;
+package org.webconsole.karaf.features.jolokia;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
 
 import org.apache.karaf.features.management.FeaturesServiceMBean;
+import org.code_house.service.api.ServicePointer;
 import org.code_house.service.api.WrapperConnection;
-import org.code_house.service.jmx.JmxServicePointer;
+import org.code_house.service.jolokia.Jolokia;
+import org.jolokia.client.J4pClient;
 import org.webconsole.karaf.features.dto.FeaturesServiceAdapter;
+import org.webconsole.karaf.features.jmx.JmxFeaturesService;
 
-public class JmxFeaturesPointer extends JmxServicePointer<FeaturesServiceAdapter> {
+/**
+ * Created by lukasz on 13.02.2014.
+ */
+public class JolokiaFeaturesPointer implements ServicePointer<FeaturesServiceAdapter> {
 
+    private final WrapperConnection<J4pClient> client;
+    private final ObjectName objectName;
+    private final String connectionId;
     private Map<String, Object> properties = new HashMap<>();
 
-    public JmxFeaturesPointer(WrapperConnection<MBeanServerConnection> connection, ObjectName objectName) {
-        super(connection, objectName);
-
+    public JolokiaFeaturesPointer(WrapperConnection<J4pClient> client, ObjectName objectName) {
+        this.client = client;
+        this.objectName = objectName;
+        this.connectionId = client.getConnectionId();
         properties.put("InstanceName", objectName.getKeyProperty("name"));
     }
 
     @Override
     public FeaturesServiceAdapter createService() {
-        return new JmxFeaturesService(createProxy(FeaturesServiceMBean.class));
+        return new JmxFeaturesService(Jolokia.newMBeanProxy(client.getConnection(), objectName, FeaturesServiceMBean.class));
     }
 
     @Override
     public Map<String, Object> getProperties() {
         return properties;
+    }
+
+    @Override
+    public boolean isBoundTo(WrapperConnection<?> connection) {
+        return connection.getConnection() instanceof J4pClient && connection.getConnectionId().equals(connectionId);
     }
 
 }

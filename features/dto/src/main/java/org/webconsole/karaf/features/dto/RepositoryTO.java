@@ -1,11 +1,11 @@
 package org.webconsole.karaf.features.dto;
 
-public class Repository {
+public class RepositoryTO {
 
     private final String id;
     private final String uri;
 
-    public Repository(String id, String uri) {
+    public RepositoryTO(String id, String uri) {
         this.id = id;
         this.uri = uri;
     }

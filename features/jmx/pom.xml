@@ -29,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>org.code-house.service</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>jmx</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

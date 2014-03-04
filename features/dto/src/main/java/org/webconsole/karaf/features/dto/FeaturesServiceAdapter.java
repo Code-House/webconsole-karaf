@@ -1,20 +1,20 @@
 package org.webconsole.karaf.features.dto;
 
-import org.webconsole.karaf.features.dto.Feature;
-import org.webconsole.karaf.features.dto.Repository;
+import org.webconsole.karaf.features.dto.FeatureTO;
+import org.webconsole.karaf.features.dto.RepositoryTO;
 
 import java.util.List;
 
 public interface FeaturesServiceAdapter {
 
-    List<Feature> getFeatures();
+    List<FeatureTO> getFeatures();
 
-    List<Repository> getRepositories();
+    List<RepositoryTO> getRepositories();
 
-    void removeRepository(Repository repository);
+    void removeRepository(RepositoryTO repository);
 
-    void installFeature(Feature feature);
+    void installFeature(FeatureTO feature);
 
-    void uninstallFeature(Feature feature);
+    void uninstallFeature(FeatureTO feature);
 
 }

@@ -20,12 +20,29 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>org.apache.karaf.features.management</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.webconsole.karaf.features</groupId>
-            <artifactId>dto</artifactId>
+            <artifactId>jmx</artifactId>
         </dependency>
         <dependency>
             <groupId>org.code-house.service</groupId>
             <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.code-house.service</groupId>
+            <artifactId>jolokia</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-client-java</artifactId>
+            <version>1.1.5</version>
         </dependency>
     </dependencies>
 
