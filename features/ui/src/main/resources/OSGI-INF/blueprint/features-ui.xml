@@ -17,16 +17,10 @@
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:wicket="http://www.ops4j.org/schema/wicket">
 
-    <reference id="brandProvider" interface="org.webconsole.api.BrandProvider" />
+    <service auto-export="interfaces">
+        <bean class="org.webconsole.karaf.features.ui.FeaturesTabProvider" />
+    </service>
 
-    <reference-list id="tabProviders" interface="org.webconsole.api.ConsoleTabProvider" availability="optional" />
-
-    <reference-list id="adapterProviders" interface="org.code_house.service.core.AdapterProvider" availability="optional" />
-
-    <service auto-export="interfaces" ref="locator" />
-
-    <bean id="locator" class="org.webconsole.karaf.platform.internal.Populator" factory-method="locator">
-        <argument ref="adapterProviders" />
-    </bean>
+    <reference id="serviceLocator" interface="org.code_house.service.api.ServiceLocator" />
 
 </blueprint>

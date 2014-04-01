@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -20,14 +21,14 @@ public class FeaturesPage extends SecuredPage {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject
+    @Inject @Named("serviceLocator")
     private ServiceLocator serviceLocator;
 
     public FeaturesPage() {
         Set<ServicePointer<FeaturesServiceAdapter>> pointers = serviceLocator.lookup(FeaturesServiceAdapter.class);
 
         List<IColumn<ServicePointer<FeaturesServiceAdapter>, String>> columns = new ArrayList<>();
-        columns.add(new PropertyColumn<ServicePointer<FeaturesServiceAdapter>, String>(Model.of("id"), ""));
+        columns.add(new PropertyColumn<ServicePointer<FeaturesServiceAdapter>, String>(Model.of("id"), "properties"));
         ListDataProvider<ServicePointer<FeaturesServiceAdapter>> dataProvider = new ListDataProvider<>(new ArrayList<>(pointers));
         add(new DataTable<ServicePointer<FeaturesServiceAdapter>, String>("services", columns, dataProvider, 100));
     }
