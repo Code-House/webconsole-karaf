@@ -1,6 +1,8 @@
 package org.webconsole.karaf.features.dto;
 
-public class FeatureTO {
+import java.io.Serializable;
+
+public class FeatureTO implements Serializable{
 
     private final String name;
     private final String version;
