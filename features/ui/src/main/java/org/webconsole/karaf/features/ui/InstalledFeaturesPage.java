@@ -9,6 +9,7 @@ import javax.swing.tree.TreeNode;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -29,7 +30,7 @@ public class InstalledFeaturesPage extends SecuredPage
 {
 	public InstalledFeaturesPage(ServicePointer<FeaturesServiceAdapter> servicePointer)
 	{
-		FeaturesServiceAdapter adapter = servicePointer.createService();
+		final FeaturesServiceAdapter adapter = servicePointer.createService();
 		List<FeatureTO> features = adapter.getFeatures();
 
         List<IColumn<FeatureTO, String>> columns = new ArrayList<>();
@@ -41,8 +42,8 @@ public class InstalledFeaturesPage extends SecuredPage
 			public void populateItem(Item<ICellPopulator<FeatureTO>> cellItem,
 					String componentId, IModel<FeatureTO> rowModel)
 			{
-				cellItem.add(new InstallationPanel(componentId));
-				
+				InstallationPanel installationPanel = new InstallationPanel(componentId, rowModel, adapter);
+				cellItem.add(installationPanel);
 			}
         	
 		});
