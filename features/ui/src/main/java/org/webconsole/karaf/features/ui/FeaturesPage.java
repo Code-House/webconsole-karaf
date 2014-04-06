@@ -63,6 +63,6 @@ public class FeaturesPage extends SecuredPage
 			}
 		});
         ListDataProvider<ServicePointer<FeaturesServiceAdapter>> dataProvider = new ListDataProvider<>(new ArrayList<>(pointers));
-        add(new DataTable<ServicePointer<FeaturesServiceAdapter>, String>("services", columns, dataProvider, 100));
-    }
+		add(new DataTable<ServicePointer<FeaturesServiceAdapter>, String>("services", columns, dataProvider, 100));
+	}
 }

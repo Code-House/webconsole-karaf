@@ -44,6 +44,7 @@
         <module>branding</module>
         <module>platform</module>
         <module>features</module>
+        <module>instance</module>
     </modules>
 
     <dependencyManagement>
@@ -83,6 +84,21 @@
             <dependency>
                 <groupId>org.webconsole.karaf.features</groupId>
                 <artifactId>ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webconsole.karaf.instance</groupId>
+                <artifactId>ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+ 	    	<dependency>
+                <groupId>org.webconsole.karaf.instance</groupId>
+                <artifactId>jmx</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webconsole.karaf.instance</groupId>
+                <artifactId>dto</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
